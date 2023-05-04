@@ -16,8 +16,12 @@ EXEC [ut].[RegisterTest]
     -- Mandatory
     @TemplateId = '1',
     @Name = 'MyNewTest',
+    -- sample with test procedure
     @TestCode = 'EXEC [ut].[test_AssertEmptyTable] @TestObject, @TestResult OUT, @TestOutput OUT, @TestTimestamp OUT',
     @TestObject = '[ut].[TEST_RESULTS]',
+    -- sample with test function
+    -- @TestCode = 'select @TestResult = TestResult, @TestOutput = TestOutput, @TestTimestamp = TestTimestamp from [ut].[test_AssertEquals] (@TestObject, 0, (select count(*) from [omd].[MODULE_PARAMETER]))';
+    -- @TestObject = 'empty table [omd].[MODULE_PARAMETER]',
     -- Non mandatory
     @Area = 'AREA',
     @TestObjectType = 'TABLE',
