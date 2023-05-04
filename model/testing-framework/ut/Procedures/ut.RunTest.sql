@@ -78,13 +78,12 @@ begin
             values (@PlanId, @TestId, @TestTimestamp, @TestOutput, @TestResult, @TestCode)
         end try
         begin catch
+            if @Debug = 'Y' PRINT 'Test Results insert failed.';
             throw
         end catch
     end
 
     else begin
-        if @Debug = 'Y' begin
-            PRINT concat('Test skipped. ENABLED: ''', @Enabled, '''.');
-        end
+        if @Debug = 'Y' PRINT concat('Test skipped. ENABLED: ''', @Enabled, '''.');
     end
 end;

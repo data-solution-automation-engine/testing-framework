@@ -42,6 +42,7 @@ begin
         set @TemplateId = SCOPE_IDENTITY();
     end try
     begin catch
+        if @Debug = 'Y' PRINT 'Template registration failed.';
         throw
     end catch
 

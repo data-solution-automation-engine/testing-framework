@@ -63,6 +63,7 @@ begin
         set @TestId = SCOPE_IDENTITY();
     end try
     begin catch
+        if @Debug = 'Y' PRINT 'Test registration failed.';
         throw
     end catch
 

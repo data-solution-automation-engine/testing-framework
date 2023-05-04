@@ -41,6 +41,7 @@ begin
 		select @TestId = ID from [ut].[TEST] where NAME = @TestName;
     end try
     begin catch
+        if @Debug = 'Y' PRINT 'Test Id look up by Name failed.';
         throw
     end catch
 
@@ -57,6 +58,7 @@ begin
 		select @PlanId = ID from [ut].[TEST_PLAN] where NAME = @PlanName;
     end try
     begin catch
+        if @Debug = 'Y' PRINT 'Plan Id look up by Name failed.';
         throw
     end catch
 
@@ -77,9 +79,9 @@ begin
             set @AddedToPlan = @@ROWCOUNT;
         end try
         begin catch
+            if @Debug = 'Y' PRINT 'Test Plan Allocation insert failed.';
             throw
         end catch
-
 
         if @Debug = 'Y' begin
             if @AddedToPlan = 1
@@ -91,7 +93,6 @@ begin
         end
     end
     else begin
-        if @Debug = 'Y'
-            PRINT 'Test Plan addition process encountered errors. Incorrect Test Name or/and Plan Name.';
+        if @Debug = 'Y' PRINT 'Test Plan addition process encountered errors. Incorrect Test Name or/and Plan Name.';
     end
 end;

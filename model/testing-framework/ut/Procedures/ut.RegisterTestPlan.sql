@@ -42,6 +42,7 @@ begin
         set @PlanId = SCOPE_IDENTITY();
     end try
     begin catch
+        if @Debug = 'Y' PRINT 'Test Plan registration failed.';
         throw
     end catch
 
