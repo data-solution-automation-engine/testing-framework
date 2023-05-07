@@ -30,8 +30,8 @@ CREATE PROCEDURE [ut].[RunTest]
     @Debug          CHAR(1) = 'N',
     @TestId         INT = NULL OUTPUT,
     @TestCode       NVARCHAR(MAX) = NULL OUTPUT,
-    @TestResult     VARCHAR(100) = NULL OUTPUT,
-    @TestOutput     VARCHAR(MAX) = NULL OUTPUT,
+    @LocalTestResult     VARCHAR(100) = NULL OUTPUT,
+    @LocalTestOutput     VARCHAR(MAX) = NULL OUTPUT,
     @TestTimestamp  DATETIME2(7) = NULL OUTPUT
 AS
 BEGIN
@@ -59,24 +59,31 @@ BEGIN
         PRINT concat('The test executable code retrieved is: ''', @TestCode, '''.');
     END
 
-    IF @Enabled = 'Y' BEGIN
-        EXEC sp_executesql @TestCode,
-            N'@TestObject VARCHAR(255), @TestResult VARCHAR(100) OUT, @TestOutput VARCHAR(MAX) OUT, @TestTimestamp DATETIME2(7) OUT',
-            @TestObject, @TestResult OUT, @TestOutput OUT, @TestTimestamp OUT;
+    IF @Enabled = 'Y' 
+        BEGIN
+            EXEC sp_executesql @TestCode,
+                N'@TestObject VARCHAR(255), @LocalTestResult VARCHAR(100) OUT, @LocalTestOutput VARCHAR(MAX) OUT, @TestTimestamp DATETIME2(7) OUT',
+                @TestObject, @LocalTestResult OUT, @LocalTestOutput OUT, @TestTimestamp OUT;
 
-        SET @TestCode = REPLACE(@TestCode, '@TestObject', @TestObject);
+            SET @TestCode = REPLACE(@TestCode, '@TestObject', @TestObject);
 
-        IF @Debug = 'Y' BEGIN
-            PRINT concat('Test Code: ''', @TestCode, '''.');
-            PRINT concat('Test Result: ''', @TestResult, '''.');
-            PRINT concat('Test Output: ''', @TestOutput, '''.');
-            PRINT concat('Test Timestamp: ''', @TestTimestamp, '''.');
-        END
+            IF @Debug = 'Y' 
+                BEGIN
+                    PRINT concat('Test Code: ''', @TestCode, '''.');
+                    PRINT concat('Test Result: ''', @LocalTestResult, '''.');
+                    PRINT concat('Test Output: ''', @LocalTestOutput, '''.');
+                    PRINT concat('Test Timestamp: ''', @TestTimestamp, '''.');
+                 END
 
         -- Inserting the test outcome(s) into the Test Results table.
         BEGIN TRY
-            INSERT INTO [ut].[TEST_RESULTS] (PLAN_ID, TEST_ID, TEST_TIMESTAMP, OUTPUT, RESULT, TEST_CODE)
-            VALUES (@PlanId, @TestId, @TestTimestamp, @TestOutput, @TestResult, @TestCode)
+
+            -- Set the run time of the test to now if not set in the test itself.
+			IF @TestTimestamp IS NULL
+				SELECT @TestTimestamp = SYSDATETIME();
+
+            INSERT INTO [ut].[TEST_RESULTS] (PLAN_ID, TEST_ID, TEST_TIMESTAMP, [OUTPUT], RESULT, TEST_CODE)
+            VALUES (@PlanId, @TestId, @TestTimestamp, @LocalTestOutput, @LocalTestResult, @TestCode)
         END TRY
         BEGIN CATCH
             IF @Debug = 'Y' PRINT 'Test Results insert failed.';
