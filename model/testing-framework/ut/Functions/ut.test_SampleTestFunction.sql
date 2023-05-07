@@ -22,9 +22,9 @@ PRINT concat('Test Timestamp: ', @TestTimestamp);
 
 */
 
-if OBJECT_ID('[ut].[test_SampleTestFunction]','TF') IS NOT NULL
-    drop function [ut].[test_SampleTestFunction]
-GO
+--if OBJECT_ID('[ut].[test_SampleTestFunction]','TF') IS NOT NULL
+--    drop function [ut].[test_SampleTestFunction]
+--GO
 
 create function [ut].[test_SampleTestFunction] (@TestObject VARCHAR(255))
 returns @TestResultsTable TABLE (

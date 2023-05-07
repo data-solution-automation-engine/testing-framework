@@ -61,14 +61,33 @@
     <Folder Include="ut\" />
     <Folder Include="ut\Tables\" />
     <Folder Include="Security\" />
+    <Folder Include="ut\Procedures" />
+    <Folder Include="ut\Functions" />
+    <Folder Include="Examples" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="ut\Tables\TEST_TEMPLATE.sql" />
-    <Build Include="ut\Tables\TEST_PLAN.sql" />
-    <Build Include="ut\Tables\EXTENSION.sql" />
-    <Build Include="ut\Tables\EXECUTION_METHOD.sql" />
-    <Build Include="ut\Tables\TEST.sql" />
-    <Build Include="ut\Tables\TEST_RESULTS.sql" />
+    <Build Include="ut\Tables\ut.EXTENSION.sql" />
+    <Build Include="ut\Tables\ut.EXECUTION_METHOD.sql" />
     <Build Include="Security\ut.sql" />
+    <Build Include="ut\Tables\ut.TEST.sql" />
+    <Build Include="ut\Tables\ut.TEST_PLAN.sql" />
+    <Build Include="ut\Tables\ut.TEST_PLAN_ALLOCATION.sql" />
+    <Build Include="ut\Tables\ut.TEST_RESULTS.sql" />
+    <Build Include="ut\Tables\ut.TEST_TEMPLATE.sql" />
+    <Build Include="ut\Procedures\ut.AddTestToPlan.sql" />
+    <Build Include="ut\Procedures\ut.RegisterTest.sql" />
+    <Build Include="ut\Procedures\ut.RegisterTestModule.sql" />
+    <Build Include="ut\Procedures\ut.RegisterTestPlan.sql" />
+    <Build Include="ut\Procedures\ut.RegisterTestTemplate.sql" />
+    <Build Include="ut\Procedures\ut.RunTest.sql" />
+    <Build Include="ut\Procedures\ut.RunTestPlan.sql" />
+    <Build Include="ut\Functions\ut.test_AssertEmptyTable.sql" />
+    <Build Include="ut\Functions\ut.test_AssertEquals.sql" />
+    <Build Include="ut\Functions\ut.test_AssertLike.sql" />
+    <Build Include="ut\Functions\ut.test_AssertNotEquals.sql" />
+    <Build Include="ut\Functions\ut.test_SampleTestFunction.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Examples\Example.sql" />
   </ItemGroup>
 </Project>

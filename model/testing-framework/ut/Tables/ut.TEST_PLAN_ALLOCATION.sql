@@ -1,6 +1,6 @@
-if OBJECT_ID('[ut].[TEST_PLAN_ALLOCATION]','U') IS NOT NULL
-    drop table [ut].[TEST_PLAN_ALLOCATION]
-GO
+--if OBJECT_ID('[ut].[TEST_PLAN_ALLOCATION]','U') IS NOT NULL
+--    drop table [ut].[TEST_PLAN_ALLOCATION]
+--GO
 
 CREATE TABLE [ut].[TEST_PLAN_ALLOCATION] (
     [TEST_ID]             INT           NOT NULL,

@@ -24,9 +24,9 @@ PRINT concat('Test Timestamp: ', @TestTimestamp);
 
 */
 
-if OBJECT_ID('[ut].[test_AssertLike]','TF') IS NOT NULL
-    drop function [ut].[test_AssertLike]
-GO
+--if OBJECT_ID('[ut].[test_AssertLike]','TF') IS NOT NULL
+--    drop function [ut].[test_AssertLike]
+--GO
 
 create function [ut].[test_AssertLike] (@TestObject VARCHAR(255), @ExpectedPattern NVARCHAR(255), @Actual NVARCHAR(MAX))
 returns @TestResultsTable TABLE (

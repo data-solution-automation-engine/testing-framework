@@ -22,9 +22,9 @@ PRINT concat('The New Test Plan Id is: ', @PlanId, '.');
 
 */
 
-if OBJECT_ID('[ut].[RegisterTestPlan]','P') IS NOT NULL
-    drop procedure [ut].[RegisterTestPlan]
-GO
+--if OBJECT_ID('[ut].[RegisterTestPlan]','P') IS NOT NULL
+--    drop procedure [ut].[RegisterTestPlan]
+--GO
 
 create procedure [ut].[RegisterTestPlan]
     @PlanName VARCHAR(255),

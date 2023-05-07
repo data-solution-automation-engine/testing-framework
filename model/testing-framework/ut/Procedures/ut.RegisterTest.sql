@@ -34,11 +34,11 @@ PRINT concat('The Test Id is: ', @TestId, '.');
 
 */
 
-if OBJECT_ID('[ut].[RegisterTest]','P') IS NOT NULL
-    drop procedure [ut].[RegisterTest]
-GO
+--if OBJECT_ID('[ut].[RegisterTest]','P') IS NOT NULL
+--    drop procedure [ut].[RegisterTest]
+--GO
 
-create procedure [ut].[RegisterTest]
+CREATE PROCEDURE [ut].[RegisterTest]
     @TemplateId     INT,
     @Name           VARCHAR(255),
     @TestCode       VARCHAR(MAX),
@@ -49,13 +49,13 @@ create procedure [ut].[RegisterTest]
     @Enabled        CHAR(1) = 'Y',
     @Debug          CHAR(1) = 'N',
     @TestId         INT = NULL OUTPUT
-as
-begin
+AS
+BEGIN
 
     DECLARE @Checksum BINARY(20) = HASHBYTES('SHA1', @TestCode);
 
-    begin try
-        insert into [ut].[TEST] (TEMPLATE_ID, NAME, TEST_CODE, AREA, TEST_OBJECT, TEST_OBJECT_TYPE, NOTES, ENABLED, CHECKSUM)
+    BEGIN TRY
+        INSERT INTO [ut].[TEST] (TEMPLATE_ID, NAME, TEST_CODE, AREA, TEST_OBJECT, TEST_OBJECT_TYPE, NOTES, ENABLED, CHECKSUM)
         select * from (
             values (@TemplateId, @Name, @TestCode, @Area, @TestObject, @TestObjectType, @Notes, @Enabled, @Checksum)
             ) AS refData(TEMPLATE_ID, NAME, TEST_CODE, AREA, TEST_OBJECT, TEST_OBJECT_TYPE, NOTES, ENABLED, CHECKSUM)
@@ -75,6 +75,6 @@ begin
             SELECT @ExistingID = ID FROM [ut].[TEST] WHERE NAME = @Name;
             PRINT concat('The Test ''', @Name, ''' already exists in [omd].[TEST] with ID ', @ExistingID, '.');
             PRINT concat('SELECT * FROM [omd].[TEST] where [NAME] = ''', @Name, '''');
-        end
-    end
-end;
+        END
+    END
+END;

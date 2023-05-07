@@ -20,9 +20,9 @@ PRINT concat('The AddedToPlan flag is: ', @AddedToPlan, '.');
 
 */
 
-if OBJECT_ID('[ut].[AddTestToPlan]','P') IS NOT NULL
-    drop procedure [ut].[AddTestToPlan]
-GO
+--if OBJECT_ID('[ut].[AddTestToPlan]','P') IS NOT NULL
+--    drop procedure [ut].[AddTestToPlan]
+--GO
 
 create procedure [ut].[AddTestToPlan]
     @TestName    VARCHAR(255),

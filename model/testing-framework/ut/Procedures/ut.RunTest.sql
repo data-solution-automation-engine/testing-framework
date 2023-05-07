@@ -20,11 +20,11 @@ EXEC [ut].[RunTest]
 
 */
 
-if OBJECT_ID('[ut].[RunTest]','P') IS NOT NULL
-    drop procedure [ut].[RunTest]
-GO
+--if OBJECT_ID('[ut].[RunTest]','P') IS NOT NULL
+--    drop procedure [ut].[RunTest]
+--GO
 
-create procedure [ut].[RunTest]
+CREATE PROCEDURE [ut].[RunTest]
     @TestName       VARCHAR(255),
     @PlanId         INT = NULL,
     @Debug          CHAR(1) = 'N',
@@ -33,57 +33,58 @@ create procedure [ut].[RunTest]
     @TestResult     VARCHAR(100) = NULL OUTPUT,
     @TestOutput     VARCHAR(MAX) = NULL OUTPUT,
     @TestTimestamp  DATETIME2(7) = NULL OUTPUT
-as
-begin
+AS
+BEGIN
 
     DECLARE @Area           VARCHAR(100);
     DECLARE @TestObject     VARCHAR(255);
     DECLARE @TestObjectType VARCHAR(100);
     DECLARE @Enabled        CHAR(1);
 
-    select
+    SELECT
         @TestId = [ID],
         @TestCode = [TEST_CODE],
         @Area = [AREA],
         @TestObject = [TEST_OBJECT],
         @TestObjectType = [TEST_OBJECT_TYPE],
         @Enabled = [ENABLED]
-    from [ut].[TEST] where [NAME] = @TestName;
+    FROM [ut].[TEST] WHERE [NAME] = @TestName;
 
-    if @Debug = 'Y' begin
+    IF @Debug = 'Y' BEGIN
         PRINT concat('The Test ID retrieved is: ''', @TestId, '''.');
         PRINT concat('The Test Area retrieved is: ''', @Area, '''.');
         PRINT concat('The Test Object retrieved is: ''', @TestObject, '''.');
         PRINT concat('The Test Object Type retrieved is: ''', @TestObjectType, '''.');
         PRINT concat('The Enabled flag retrieved is: ''', @Enabled, '''.');
         PRINT concat('The test executable code retrieved is: ''', @TestCode, '''.');
-    end
+    END
 
-    if @Enabled = 'Y' begin
+    IF @Enabled = 'Y' BEGIN
         EXEC sp_executesql @TestCode,
             N'@TestObject VARCHAR(255), @TestResult VARCHAR(100) OUT, @TestOutput VARCHAR(MAX) OUT, @TestTimestamp DATETIME2(7) OUT',
             @TestObject, @TestResult OUT, @TestOutput OUT, @TestTimestamp OUT;
 
         SET @TestCode = REPLACE(@TestCode, '@TestObject', @TestObject);
 
-        if @Debug = 'Y' begin
+        IF @Debug = 'Y' BEGIN
             PRINT concat('Test Code: ''', @TestCode, '''.');
             PRINT concat('Test Result: ''', @TestResult, '''.');
             PRINT concat('Test Output: ''', @TestOutput, '''.');
             PRINT concat('Test Timestamp: ''', @TestTimestamp, '''.');
-        end
+        END
 
-        begin try
-            insert into [ut].[TEST_RESULTS] (PLAN_ID, TEST_ID, TEST_TIMESTAMP, OUTPUT, RESULT, TEST_CODE)
-            values (@PlanId, @TestId, @TestTimestamp, @TestOutput, @TestResult, @TestCode)
-        end try
-        begin catch
-            if @Debug = 'Y' PRINT 'Test Results insert failed.';
-            throw
-        end catch
-    end
+        -- Inserting the test outcome(s) into the Test Results table.
+        BEGIN TRY
+            INSERT INTO [ut].[TEST_RESULTS] (PLAN_ID, TEST_ID, TEST_TIMESTAMP, OUTPUT, RESULT, TEST_CODE)
+            VALUES (@PlanId, @TestId, @TestTimestamp, @TestOutput, @TestResult, @TestCode)
+        END TRY
+        BEGIN CATCH
+            IF @Debug = 'Y' PRINT 'Test Results insert failed.';
+            THROW
+        END CATCH
+    END
 
-    else begin
-        if @Debug = 'Y' PRINT concat('Test skipped. ENABLED: ''', @Enabled, '''.');
-    end
-end;
+    ELSE BEGIN
+        IF @Debug = 'Y' PRINT concat('Test skipped. ENABLED: ''', @Enabled, '''.');
+    END
+END;

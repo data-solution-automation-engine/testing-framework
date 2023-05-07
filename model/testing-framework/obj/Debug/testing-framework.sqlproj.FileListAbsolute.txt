@@ -8,3 +8,9 @@ D:\Git_Repos\testing-framework\model\database-project\testing-framework\obj\Debu
 D:\Git_Repos\testing-framework\model\database-project\testing-framework\obj\Debug\predeploy.sql
 D:\Git_Repos\testing-framework\model\database-project\testing-framework\obj\Debug\testing_framework.dll
 D:\Git_Repos\testing-framework\model\database-project\testing-framework\obj\Debug\testing_framework.pdb
+D:\Git_Repos\testing-framework\model\testing-framework\bin\Debug\testing-framework.dacpac
+D:\Git_Repos\testing-framework\model\testing-framework\obj\Debug\testing-framework.sqlproj.AssemblyReference.cache
+D:\Git_Repos\testing-framework\model\testing-framework\obj\Debug\testing_framework.dll
+D:\Git_Repos\testing-framework\model\testing-framework\obj\Debug\testing_framework.pdb
+D:\Git_Repos\testing-framework\model\testing-framework\bin\Debug\testing_framework.dll
+D:\Git_Repos\testing-framework\model\testing-framework\bin\Debug\testing_framework.pdb

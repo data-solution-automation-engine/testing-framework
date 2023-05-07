@@ -19,39 +19,39 @@ EXEC sp_executesql @TestCode,
 PRINT concat('Test Result: ', @TestResult);
 PRINT concat('Test Output: ', @TestOutput);
 PRINT concat('Test Timestamp: ', @TestTimestamp);
-
 */
 
-if OBJECT_ID('[ut].[test_AssertEmptyTable]','P') IS NOT NULL
-    drop procedure [ut].[test_AssertEmptyTable]
-GO
 
-create procedure [ut].[test_AssertEmptyTable]
+--IF OBJECT_ID('[ut].[test_AssertEmptyTable]','P') IS NOT NULL
+--    DROP PROCEDURE [ut].[test_AssertEmptyTable]
+--GO
+
+CREATE PROCEDURE [ut].[test_AssertEmptyTable]
     @TestObject     VARCHAR(255),
     @TestResult     VARCHAR(100) = NULL OUTPUT,
     @TestOutput     VARCHAR(MAX) = NULL OUTPUT,
     @TestTimestamp  DATETIME2(7) = NULL OUTPUT
-as
-begin
+AS
+BEGIN
     DECLARE @ObjectId INT = OBJECT_ID(@TestObject,'U');
-    set @TestTimestamp = SYSDATETIME();
+    SET @TestTimestamp = SYSDATETIME();
 
-    if @ObjectId IS NULL begin
-        set @TestResult = 'Error';
-        set @TestOutput = 'Function: <AssertEmptyTable>. TestObject: <'+ISNULL(@TestObject,'NULL')+'>. Error: Table was not found.';
-    end
-    else begin
+    IF @ObjectId IS NULL BEGIN
+        SET @TestResult = 'Error';
+        SET @TestOutput = 'Function: <AssertEmptyTable>. TestObject: <'+ISNULL(@TestObject,'NULL')+'>. Error: Table was not found.';
+    END
+    ELSE BEGIN
         DECLARE @Empty      INT;
         DECLARE @QuotedName VARCHAR(255) = QUOTENAME(OBJECT_SCHEMA_NAME(@ObjectId))+'.'+QUOTENAME(OBJECT_NAME(@ObjectId));
         DECLARE @Query      NVARCHAR(MAX) = 'select @Empty = case when NOT EXISTS(select NULL from '+@QuotedName+') THEN 1 ELSE 0 END;';
         EXEC sp_executesql @Query, N'@Empty INT OUT', @Empty OUT;
-        if @Empty = 1 begin
-            set @TestResult = 'Pass';
-            set @TestOutput = 'Function: <AssertEmptyTable>. TestObject: <'+ISNULL(@TestObject,'NULL')+'>. OK: Table was empty.';
-        end
-        else begin
-            set @TestResult = 'Fail';
-            set @TestOutput = 'Function: <AssertEmptyTable>. TestObject: <'+ISNULL(@TestObject,'NULL')+'>. Fail: Table was not empty.';
-        end
-    end
-end;
+        IF @Empty = 1 BEGIN
+            SET @TestResult = 'Pass';
+            SET @TestOutput = 'Function: <AssertEmptyTable>. TestObject: <'+ISNULL(@TestObject,'NULL')+'>. OK: Table was empty.';
+        END
+        ELSE BEGIN
+            SET @TestResult = 'Fail';
+            SET @TestOutput = 'Function: <AssertEmptyTable>. TestObject: <'+ISNULL(@TestObject,'NULL')+'>. Fail: Table was not empty.';
+        END
+    END
+END;

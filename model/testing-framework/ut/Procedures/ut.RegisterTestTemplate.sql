@@ -19,13 +19,13 @@ EXEC [ut].[RegisterTestTemplate]
     @Debug = 'Y',
     -- Output
     @TemplateId = @TemplateId OUTPUT;
-PRINT concat('The New Test Template Id is: ', @TemplateId, '.');
+PRINT concat('The new Test Template Id is: ', @TemplateId, '.');
 
 */
 
-if OBJECT_ID('[ut].[RegisterTestTemplate]','P') IS NOT NULL
-    drop procedure [ut].[RegisterTestTemplate]
-GO
+--if OBJECT_ID('[ut].[RegisterTestTemplate]','P') IS NOT NULL
+--    drop procedure [ut].[RegisterTestTemplate]
+--GO
 
 create procedure [ut].[RegisterTestTemplate]
     @TemplateName  VARCHAR(255),

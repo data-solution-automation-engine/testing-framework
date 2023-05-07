@@ -14,11 +14,11 @@ EXEC [ut].[RunTestPlan]
 
 */
 
-if OBJECT_ID('[ut].[RunTestPlan]','P') IS NOT NULL
-    drop procedure [ut].[RunTestPlan]
-GO
+--if OBJECT_ID('[ut].[RunTestPlan]','P') IS NOT NULL
+--    drop procedure [ut].[RunTestPlan]
+--GO
 
-create procedure [ut].[RunTestPlan]
+CREATE PROCEDURE [ut].[RunTestPlan]
     @PlanName VARCHAR(255),
     @Debug    CHAR(1) = 'N',
     @PlanId   INT = NULL OUTPUT

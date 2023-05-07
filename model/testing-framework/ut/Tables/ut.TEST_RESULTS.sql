@@ -1,5 +1,5 @@
-﻿if OBJECT_ID('[ut].[TEST_RESULTS]','U') IS NOT NULL
-    drop table [ut].[TEST_RESULTS]
+﻿-- IF OBJECT_ID('[ut].[TEST_RESULTS]','U') IS NOT NULL
+-- DROP TABLE [ut].[TEST_RESULTS]
 GO
 
 CREATE TABLE [ut].[TEST_RESULTS] (

@@ -1,6 +1,6 @@
-﻿if OBJECT_ID('[ut].[TEST]','U') IS NOT NULL
-    drop table [ut].[TEST]
-GO
+﻿--if OBJECT_ID('[ut].[TEST]','U') IS NOT NULL
+--    drop table [ut].[TEST]
+--GO
 
 CREATE TABLE [ut].[TEST] (
     [ID]               INT IDENTITY (1,1) NOT NULL,

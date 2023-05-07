@@ -27,9 +27,9 @@ PRINT concat('The Module Id is: ', @ModuleID, '.');
 
 */
 
-if OBJECT_ID('[ut].[RegisterTestModule]','P') IS NOT NULL
-    drop procedure [ut].[RegisterTestModule]
-GO
+--if OBJECT_ID('[ut].[RegisterTestModule]','P') IS NOT NULL
+--    drop procedure [ut].[RegisterTestModule]
+--GO
 
 create procedure [ut].[RegisterTestModule]
     @Name                    VARCHAR(255),

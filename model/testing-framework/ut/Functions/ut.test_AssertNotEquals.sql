@@ -24,9 +24,9 @@ PRINT concat('Test Timestamp: ', @TestTimestamp);
 
 */
 
-if OBJECT_ID('[ut].[test_AssertNotEquals]','TF') IS NOT NULL
-    drop function [ut].[test_AssertNotEquals]
-GO
+--if OBJECT_ID('[ut].[test_AssertNotEquals]','TF') IS NOT NULL
+--    drop function [ut].[test_AssertNotEquals]
+--GO
 
 create function [ut].[test_AssertNotEquals] (@TestObject VARCHAR(255), @NotExpected SQL_VARIANT, @Actual SQL_VARIANT)
 returns @TestResultsTable TABLE (
