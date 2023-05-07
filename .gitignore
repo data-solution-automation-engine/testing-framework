@@ -138,3 +138,4 @@ UpgradeLog*.htm
 
 .vscode
 *.jfm
+model/testing-framework/.vs/testing-framework/v17/.suo
