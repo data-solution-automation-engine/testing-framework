@@ -38,6 +38,7 @@ PRINT concat('The Test Id is: ', @TestId, '.');
 --    drop procedure [ut].[RegisterTest]
 --GO
 
+--CREATE OR ALTER PROCEDURE [ut].[RegisterTest]
 CREATE PROCEDURE [ut].[RegisterTest]
     @TemplateId     INT,
     @Name           VARCHAR(255),
@@ -51,30 +52,59 @@ CREATE PROCEDURE [ut].[RegisterTest]
     @TestId         INT = NULL OUTPUT
 AS
 BEGIN
+    IF @Debug = 'Y' 
+		PRINT 'Registering test for '+@Name+'.';
 
-    DECLARE @Checksum BINARY(20) = HASHBYTES('SHA1', @TestCode);
+    DECLARE @NewChecksum BINARY(20) = HASHBYTES('SHA1', @TestCode);
 
     BEGIN TRY
-        INSERT INTO [ut].[TEST] (TEMPLATE_ID, NAME, TEST_CODE, AREA, TEST_OBJECT, TEST_OBJECT_TYPE, NOTES, ENABLED, CHECKSUM)
-        select * from (
-            values (@TemplateId, @Name, @TestCode, @Area, @TestObject, @TestObjectType, @Notes, @Enabled, @Checksum)
-            ) AS refData(TEMPLATE_ID, NAME, TEST_CODE, AREA, TEST_OBJECT, TEST_OBJECT_TYPE, NOTES, ENABLED, CHECKSUM)
-        where NOT EXISTS (select NULL from [ut].[TEST] t where t.NAME = refData.NAME);
-        set @TestId = SCOPE_IDENTITY();
-    end try
-    begin catch
-        if @Debug = 'Y' PRINT 'Test registration failed.';
-        throw
-    end catch
+		-- Insert the test, if it does not exist yet.
+        INSERT INTO [ut].[TEST] (TEMPLATE_ID, NAME, TEST_CODE, AREA, TEST_OBJECT, TEST_OBJECT_TYPE, NOTES, [ENABLED], [CHECKSUM])
+        SELECT * FROM (
+            VALUES (@TemplateId, @Name, @TestCode, @Area, @TestObject, @TestObjectType, @Notes, @Enabled, @NewChecksum)
+            ) AS refData(TEMPLATE_ID, NAME, TEST_CODE, AREA, TEST_OBJECT, TEST_OBJECT_TYPE, NOTES, [ENABLED], [CHECKSUM])
+        WHERE NOT EXISTS (SELECT NULL FROM [ut].[TEST] t WHERE t.NAME = refData.NAME);
+        SET @TestId = SCOPE_IDENTITY();
+    END TRY
+    BEGIN CATCH
+        IF @Debug = 'Y' 
+			PRINT 'Test registration failed.';
+			
+		THROW
+    END CATCH
 
-    if @Debug = 'Y' begin
-        if @TestId IS NOT NULL
-            PRINT concat('A new Test ID ''', @TestId, ''' has been created for Test Name: ''', @Name, '''.');
-        else begin
-            DECLARE @ExistingID INT;
-            SELECT @ExistingID = ID FROM [ut].[TEST] WHERE NAME = @Name;
-            PRINT concat('The Test ''', @Name, ''' already exists in [omd].[TEST] with ID ', @ExistingID, '.');
-            PRINT concat('SELECT * FROM [omd].[TEST] where [NAME] = ''', @Name, '''');
-        END
-    END
+	IF @Debug = 'Y' 
+		PRINT 'Starting test id evaluation.';
+
+	-- If a new test is created...
+    IF @TestId IS NOT NULL
+		BEGIN
+			IF @Debug = 'Y' 
+				PRINT concat('A new Test ID ''', @TestId, ''' has been created for Test Name: ''', @Name, '''.');
+		END
+    ELSE 
+		BEGIN
+			-- Compare the checksums, and update the code if different.
+			DECLARE @ExistingID INT;
+			DECLARE @ExistingChecksum BINARY(20);
+
+			SELECT @ExistingID = ID FROM [ut].[TEST] WHERE NAME = @Name;
+
+			SELECT @ExistingChecksum = [CHECKSUM] FROM ut.TEST WHERE [ID] = @ExistingID
+
+			IF @Debug = 'Y' 
+				PRINT concat('The Test ''', @Name, ''' already exists in [omd].[TEST] with ID ', @ExistingID, '.');
+
+			IF @NewChecksum != @ExistingChecksum
+				BEGIN
+					IF @Debug = 'Y' 
+						PRINT concat('The Test ''', @Name, ''' has been updated with new test code.');		
+						
+					UPDATE ut.TEST SET TEST_CODE = @TestCode, [CHECKSUM] = @NewChecksum WHERE [ID] = @ExistingID
+				END
+
+			-- Return the already existing id, in case it is used for downstream processes.
+			SET @TestId = @ExistingID;
+		END
+
 END;

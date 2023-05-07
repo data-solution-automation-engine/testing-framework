@@ -24,6 +24,7 @@ EXEC [ut].[RegisterTest]
     @TemplateId = '1',
     @Name = 'RI_SAT_CUSTOMER',
     -- sample with test procedure
+	@Debug='Y',
     @TestCode = '-- Framework required.
 DECLARE @TestResult VARCHAR(10) = ''Fail'';
 -- Local
@@ -53,6 +54,8 @@ SELECT @TestResult AS [OUTPUT]
     @TestId = @TestId OUTPUT;
 PRINT concat('The Test Id is: ', @TestId, '.');
 
+--SELECT * FROM ut.TEST
+
 -- Step 3: run the test
 
 EXEC [ut].[RunTest]
@@ -60,4 +63,5 @@ EXEC [ut].[RunTest]
     @PlanId = NULL,
     @Debug = 'Y';
 
-SELECT * FROM ut.TEST_RESULTS
+--SELECT * FROM ut.TEST_RESULTS
+--TO DO: the current code does not correclty capture output (any parameters we want to store, in this case the  number if issues found) and the result (pass or fail).

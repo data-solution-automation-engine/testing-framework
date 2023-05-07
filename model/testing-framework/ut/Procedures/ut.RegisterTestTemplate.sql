@@ -27,33 +27,39 @@ PRINT concat('The new Test Template Id is: ', @TemplateId, '.');
 --    drop procedure [ut].[RegisterTestTemplate]
 --GO
 
-create procedure [ut].[RegisterTestTemplate]
+--CREATE OR ALTER PROCEDURE [ut].[RegisterTestTemplate]
+CREATE PROCEDURE [ut].[RegisterTestTemplate]
     @TemplateName  VARCHAR(255),
     @TemplateNotes VARCHAR(MAX) = NULL,
     @Debug         CHAR(1) = 'N',
     @TemplateId    INT = NULL OUTPUT
-as
-begin
+AS
+BEGIN
 
-    begin try
-        insert into [ut].[TEST_TEMPLATE] (NAME, NOTES)
-        select * from (values (@TemplateName, @TemplateNotes)) AS refData(NAME, NOTES)
-        where NOT EXISTS (select NULL from [ut].[TEST_TEMPLATE] t where t.NAME = refData.NAME);
-        set @TemplateId = SCOPE_IDENTITY();
-    end try
-    begin catch
-        if @Debug = 'Y' PRINT 'Template registration failed.';
-        throw
-    end catch
+    BEGIN TRY
+        INSERT INTO [ut].[TEST_TEMPLATE] (NAME, NOTES)
+        SELECT * FROM (VALUES (@TemplateName, @TemplateNotes)) AS refData(NAME, NOTES)
+        WHERE NOT EXISTS (select NULL from [ut].[TEST_TEMPLATE] t WHERE t.NAME = refData.NAME);
+        SET @TemplateId = SCOPE_IDENTITY();
+    END TRY
+    BEGIN CATCH
+        IF @Debug = 'Y' PRINT 'Template registration failed.';
+			THROW
+    END CATCH
 
-    if @Debug = 'Y' begin
-        if @TemplateId IS NOT NULL
+    IF @Debug = 'Y' 
+	BEGIN
+        IF @TemplateId IS NOT NULL
             PRINT concat('A new Test Template ID ''', @TemplateId, ''' has been created for Template Name: ''', @TemplateName, '''.');
-        else begin
-            DECLARE @ExistingID INT;
-            SELECT @ExistingId = ID FROM [ut].[TEST_TEMPLATE] WHERE NAME = @TemplateName;
-            PRINT concat('The Test Template ''', @TemplateName, ''' already exists in [omd].[TEST_TEMPLATE] with ID ', @ExistingId, '.');
-            PRINT concat('SELECT * FROM [omd].[TEST_TEMPLATE] where [NAME] = ''', @TemplateName, '''');
-        end
-    end
-end;
+        ELSE 
+			BEGIN
+				DECLARE @ExistingID INT;
+				SELECT @ExistingId = ID FROM [ut].[TEST_TEMPLATE] WHERE NAME = @TemplateName;
+				PRINT concat('The Test Template ''', @TemplateName, ''' already exists in [omd].[TEST_TEMPLATE] with ID ', @ExistingId, '.');
+				PRINT concat('SELECT * FROM [omd].[TEST_TEMPLATE] where [NAME] = ''', @TemplateName, '''');
+
+				-- Return the already existing id.
+				SET @TemplateId = @ExistingID;
+			END
+    END
+END;
