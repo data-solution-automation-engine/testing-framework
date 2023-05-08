@@ -86,6 +86,7 @@
     <Build Include="ut\Functions\ut.test_AssertLike.sql" />
     <Build Include="ut\Functions\ut.test_AssertNotEquals.sql" />
     <Build Include="ut\Functions\ut.test_SampleTestFunction.sql" />
+    <Build Include="Examples\Example2.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Examples\Example.sql" />
