@@ -24,7 +24,8 @@ EXEC [ut].[RunTest]
 --    drop procedure [ut].[RunTest]
 --GO
 
-CREATE PROCEDURE [ut].[RunTest]
+CREATE OR ALTER PROCEDURE [ut].[RunTest]
+--CREATE PROCEDURE [ut].[RunTest]
     @TestName       VARCHAR(255),
     @PlanId         INT = NULL,
     @Debug          CHAR(1) = 'N',
@@ -32,7 +33,7 @@ CREATE PROCEDURE [ut].[RunTest]
     @TestCode       NVARCHAR(MAX) = NULL OUTPUT,
     @LocalTestResult     VARCHAR(100) = NULL OUTPUT,
     @LocalTestOutput     VARCHAR(MAX) = NULL OUTPUT,
-    @TestTimestamp  DATETIME2(7) = NULL OUTPUT
+    @LocalTestTimestamp  DATETIME2(7) = NULL OUTPUT
 AS
 BEGIN
 
@@ -61,29 +62,32 @@ BEGIN
 
     IF @Enabled = 'Y' 
         BEGIN
-            EXEC sp_executesql @TestCode,
-                N'@TestObject VARCHAR(255), @LocalTestResult VARCHAR(100) OUT, @LocalTestOutput VARCHAR(MAX) OUT, @TestTimestamp DATETIME2(7) OUT',
-                @TestObject, @LocalTestResult OUT, @LocalTestOutput OUT, @TestTimestamp OUT;
-
             SET @TestCode = REPLACE(@TestCode, '@TestObject', @TestObject);
+
+            PRINT 'Running test code'
+            EXEC sp_executesql @TestCode,
+                N'@TestResult VARCHAR(100) OUTPUT, @TestOutput VARCHAR(MAX) OUTPUT, @TestTimestamp DATETIME2(7) OUT',
+                @TestResult=@LocalTestResult OUTPUT, @TestOutput=@LocalTestOutput OUTPUT, @TestTimestamp=@LocalTestTimestamp OUTPUT;
+
+	SELECT @LocalTestOutput
 
             IF @Debug = 'Y' 
                 BEGIN
                     PRINT concat('Test Code: ''', @TestCode, '''.');
                     PRINT concat('Test Result: ''', @LocalTestResult, '''.');
                     PRINT concat('Test Output: ''', @LocalTestOutput, '''.');
-                    PRINT concat('Test Timestamp: ''', @TestTimestamp, '''.');
+                    PRINT concat('Test Timestamp: ''', @LocalTestTimestamp, '''.');
                  END
 
         -- Inserting the test outcome(s) into the Test Results table.
         BEGIN TRY
 
             -- Set the run time of the test to now if not set in the test itself.
-			IF @TestTimestamp IS NULL
-				SELECT @TestTimestamp = SYSDATETIME();
+			IF @LocalTestTimestamp IS NULL
+				SELECT @LocalTestTimestamp = SYSDATETIME();
 
             INSERT INTO [ut].[TEST_RESULTS] (PLAN_ID, TEST_ID, TEST_TIMESTAMP, [OUTPUT], RESULT, TEST_CODE)
-            VALUES (@PlanId, @TestId, @TestTimestamp, @LocalTestOutput, @LocalTestResult, @TestCode)
+            VALUES (@PlanId, @TestId, @LocalTestTimestamp, @LocalTestOutput, @LocalTestResult, @TestCode)
         END TRY
         BEGIN CATCH
             IF @Debug = 'Y' PRINT 'Test Results insert failed.';

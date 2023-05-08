@@ -25,30 +25,40 @@ EXEC [ut].[RegisterTest]
     @Name = 'RI_SAT_CUSTOMER',
     -- sample with test procedure
 	@Debug='Y',
-    @TestCode = '-- Framework required.
-DECLARE @TestResult VARCHAR(10) = ''Fail'';
--- Local
-DECLARE @Issues INT = 0;
+    @TestCode = 'BEGIN
+	-- Framework required.
+	--DECLARE @TestResult VARCHAR(10) = ''Fail'';
+	--DECLARE @TestOutput VARCHAR(MAX);
+	-- Local
+	DECLARE @Issues INT = 0;
 
-SELECT @Issues =
-    COUNT(*)
-FROM [200_Integration_Layer].dbo.SAT_CUSTOMER sat
-WHERE NOT EXISTS
-(
-  SELECT 1 FROM [200_Integration_Layer].dbo.HUB_CUSTOMER hub
-  WHERE 1=1
-     AND sat.CUSTOMER_SK = hub.CUSTOMER_SK
-)
+	BEGIN TRY
+		SELECT @Issues =
+			COUNT(*)
+		FROM [200_Integration_Layer].dbo.SAT_CUSTOMER sat
+		WHERE NOT EXISTS
+		(
+		  SELECT 1 FROM [200_Integration_Layer].dbo.HUB_CUSTOMER hub
+		  WHERE 1=1
+			 AND sat.CUSTOMER_SK = hub.CUSTOMER_SK
+		)
 
---PRINT CONVERT(CHAR(1), @Issues)
+		SET @TestOutput = CONVERT(VARCHAR(10),@Issues)+'' issues were found.'' 
 
-IF @Issues=0
-	BEGIN
-		SET @TestResult=''Pass''
-	END
+		IF @Issues=0
+		BEGIN
+			SET @TestResult=''Pass''
+		END
+	END TRY
+	BEGIN CATCH
+		--THROW
+		SET @TestOutput = ERROR_MESSAGE();
+		SET @TestResult=''Fail''
+	END CATCH
 
-SELECT @TestResult AS [OUTPUT]
--- Needs something to grab the results and insert into the Tests Results table.',
+
+	SELECT @TestOutput AS [OUTPUT], @TestResult AS [RESULT]
+END',
     @TestObject = '[200_Integration_Layer].dbo.SAT_CUSTOMER',
     -- Output
     @TestId = @TestId OUTPUT;
@@ -63,5 +73,4 @@ EXEC [ut].[RunTest]
     @PlanId = NULL,
     @Debug = 'Y';
 
---SELECT * FROM ut.TEST_RESULTS
---TO DO: the current code does not correclty capture output (any parameters we want to store, in this case the  number if issues found) and the result (pass or fail).
+SELECT * FROM ut.TEST_RESULTS
