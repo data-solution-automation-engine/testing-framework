@@ -69,7 +69,6 @@ BEGIN
     BEGIN CATCH
         IF @Debug = 'Y' 
 			PRINT 'Test registration failed.';
-			
 		THROW
     END CATCH
 
@@ -96,12 +95,25 @@ BEGIN
 				PRINT concat('The Test ''', @Name, ''' already exists in [omd].[TEST] with ID ', @ExistingID, '.');
 
 			IF @NewChecksum != @ExistingChecksum
-				BEGIN
-					IF @Debug = 'Y' 
+				BEGIN TRY
+					UPDATE [ut].[TEST] SET
+						[TEST_CODE] = @TestCode,
+						[TEMPLATE_ID] = @TemplateId,
+						[TEST_OBJECT] = @TestObject,
+						[AREA] = @Area,
+						[TEST_OBJECT_TYPE] = @TestObjectType,
+						[NOTES] = @Notes,
+						[ENABLED] = @Enabled,
+						[CHECKSUM] = @NewChecksum
+					WHERE [ID] = @ExistingID;
+					IF @Debug = 'Y'
 						PRINT concat('The Test ''', @Name, ''' has been updated with new test code.');		
-						
-					UPDATE ut.TEST SET TEST_CODE = @TestCode, [CHECKSUM] = @NewChecksum WHERE [ID] = @ExistingID
-				END
+				END TRY
+				BEGIN CATCH
+					IF @Debug = 'Y'
+						PRINT concat('Error. The Test ''', @Name, ''' update with new test code failed.');
+					THROW
+				END CATCH
 
 			-- Return the already existing id, in case it is used for downstream processes.
 			SET @TestId = @ExistingID;
