@@ -76,7 +76,7 @@ BEGIN
                               'Satellite: <'+@SatTable+'>. ' +
                               'Hub: <'+@HubTable+'>. ' +
                               'TestObject: <'+@TestObject+'>. ' +
-                              'Fail. Issues found: <'+ISNULL(@Issues,'NULL')+'>.';
+                              'Fail. Issues found: <'+ISNULL(STR(@Issues),'NULL')+'>.';
         END
     END
 END;
