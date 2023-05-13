@@ -28,3 +28,5 @@ C:\Git_Repos\testing-framework\model\testing-framework\obj\Debug\testing_framewo
 C:\Git_Repos\testing-framework\model\testing-framework\obj\Debug\testing_framework.pdb
 C:\Git_Repos\testing-framework\model\testing-framework\bin\Debug\testing_framework.dll
 C:\Git_Repos\testing-framework\model\testing-framework\bin\Debug\testing_framework.pdb
+C:\Git_Repos\testing-framework\model\testing-framework\bin\Debug\master.dacpac
+C:\Git_Repos\testing-framework\model\testing-framework\obj\Debug\testing-framework.sqlproj.CopyComplete
