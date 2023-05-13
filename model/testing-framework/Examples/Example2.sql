@@ -1,5 +1,8 @@
--- One more example on how to use the testing framework
+/*
 
+Examples on how to use the testing framework.
+
+*/
 
 -- Step 1: register a new test template.
 
@@ -10,7 +13,6 @@ EXEC [ut].[RegisterTestTemplate]
      @Debug = 'Y',
      @TemplateId = @TemplateId OUTPUT;
 PRINT concat('The Test Template Id is: ', @TemplateId, '.');
-
 
 -- Step 2: register a new test for this template.
 -- This is the code that can be generated using VDW.

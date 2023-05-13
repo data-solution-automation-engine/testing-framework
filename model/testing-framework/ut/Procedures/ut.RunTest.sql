@@ -24,8 +24,8 @@ EXEC [ut].[RunTest]
 --    drop procedure [ut].[RunTest]
 --GO
 
-CREATE OR ALTER PROCEDURE [ut].[RunTest]
---CREATE PROCEDURE [ut].[RunTest]
+CREATE PROCEDURE [ut].[RunTest]
+--CREATE OR ALTER PROCEDURE [ut].[RunTest]
     @TestName       VARCHAR(255),
     @PlanId         INT = NULL,
     @Debug          CHAR(1) = 'N',
@@ -65,7 +65,7 @@ BEGIN
             SET @TestCode = REPLACE(@TestCode, '@TestObject', @TestObject);
 
             PRINT 'Running test code'
-            EXEC sp_executesql @TestCode,
+            EXEC [dbo].sp_executesql @TestCode,
                 N'@TestResult VARCHAR(100) OUTPUT, @TestOutput VARCHAR(MAX) OUTPUT, @TestTimestamp DATETIME2(7) OUT',
                 @TestResult=@LocalTestResult OUTPUT, @TestOutput=@LocalTestOutput OUTPUT, @TestTimestamp=@LocalTestTimestamp OUTPUT;
 

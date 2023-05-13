@@ -76,7 +76,7 @@
     <Build Include="ut\Tables\ut.TEST_TEMPLATE.sql" />
     <Build Include="ut\Procedures\ut.AddTestToPlan.sql" />
     <Build Include="ut\Procedures\ut.RegisterTest.sql" />
-    <Build Include="ut\Procedures\ut.RegisterTestModule.sql" />
+    <None Include="ut\Procedures\ut.RegisterTestModule.sql" />
     <Build Include="ut\Procedures\ut.RegisterTestPlan.sql" />
     <Build Include="ut\Procedures\ut.RegisterTestTemplate.sql" />
     <Build Include="ut\Procedures\ut.RunTest.sql" />
@@ -86,9 +86,16 @@
     <Build Include="ut\Functions\ut.test_AssertLike.sql" />
     <Build Include="ut\Functions\ut.test_AssertNotEquals.sql" />
     <Build Include="ut\Functions\ut.test_SampleTestFunction.sql" />
-    <Build Include="Examples\Example2.sql" />
+    <None Include="Examples\Example2.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Examples\Example.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\160\SqlSchemas\master.dacpac">
+      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\160\SqlSchemas\master.dacpac</HintPath>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
+    </ArtifactReference>
   </ItemGroup>
 </Project>
