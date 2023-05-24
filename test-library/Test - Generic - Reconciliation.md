@@ -1,18 +1,20 @@
 # Design Pattern - Generic - Reconciliation
 
 ## Purpose
-Ensuring the contents of two separate objects contain the same data.
+Ensuring the contents of two separate objects contain the same data, an assertion if two data sets are 100% equal.
+
+An example is comparing a Dimension to a sample file that contains the expected structure and content.
 
 ## Motivation
-<explanation of what happens if it fails>
+Reconciliation checks are sometimes used as a means to automatically tests outputs against expected results, for example using a sample data set that must be reproduced like for like. Another use case is the comparison of data that is copied from one location to another.
 
 ## Structure
 Using INTERSECT/EXCEPT
 
 ## Considerations and Consequences
 
-Column order.
+The order of columns needs to be exactly the same for this pattern to work well.
 
 ## Example
 
-`Code example here`
+`SELECT * FROM TABLE1 EXCEPT SELECT * FROM TABLE2`
