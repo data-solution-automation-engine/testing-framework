@@ -38,8 +38,10 @@ BEGIN
 
     BEGIN TRY
         INSERT INTO [ut].[TEST_TEMPLATE] (NAME, NOTES)
-        SELECT * FROM (VALUES (@TemplateName, @TemplateNotes)) AS refData(NAME, NOTES)
+        SELECT * 
+		FROM (VALUES (@TemplateName, @TemplateNotes)) AS refData(NAME, NOTES)
         WHERE NOT EXISTS (select NULL from [ut].[TEST_TEMPLATE] t WHERE t.NAME = refData.NAME);
+
         SET @TemplateId = SCOPE_IDENTITY();
     END TRY
     BEGIN CATCH
@@ -47,19 +49,26 @@ BEGIN
 			THROW
     END CATCH
 
-    IF @Debug = 'Y' 
 	BEGIN
-        IF @TemplateId IS NOT NULL
-            PRINT concat('A new Test Template ID ''', @TemplateId, ''' has been created for Template Name: ''', @TemplateName, '''.');
-        ELSE 
+        IF @TemplateId IS NULL
 			BEGIN
 				DECLARE @ExistingID INT;
+ 
 				SELECT @ExistingId = ID FROM [ut].[TEST_TEMPLATE] WHERE NAME = @TemplateName;
-				PRINT concat('The Test Template ''', @TemplateName, ''' already exists in [omd].[TEST_TEMPLATE] with ID ', @ExistingId, '.');
-				PRINT concat('SELECT * FROM [omd].[TEST_TEMPLATE] where [NAME] = ''', @TemplateName, '''');
+
+				IF @Debug = 'Y' 
+				BEGIN
+					PRINT concat('The Test Template ''', @TemplateName, ''' already exists in [omd].[TEST_TEMPLATE] with ID ', CONVERT(VARCHAR(10),@ExistingID), '.');
+					PRINT concat('SELECT * FROM [omd].[TEST_TEMPLATE] where [NAME] = ''', @TemplateName, '''');
+				END
 
 				-- Return the already existing id.
 				SET @TemplateId = @ExistingID;
+			END
+		ELSE
+			BEGIN
+				IF @Debug = 'Y' 
+					PRINT concat('A new Test Template ID ''', CONVERT(VARCHAR(10),@TemplateId), ''' has been created for Template Name: ''', @TemplateName, '''.');
 			END
     END
 END;
