@@ -65,9 +65,25 @@ BEGIN
             SET @TestCode = REPLACE(@TestCode, '@TestObject', @TestObject);
 
             PRINT 'Running test code'
-            EXEC [dbo].sp_executesql @TestCode,
-                N'@TestResult VARCHAR(100) OUTPUT, @TestOutput VARCHAR(MAX) OUTPUT, @TestTimestamp DATETIME2(7) OUT',
-                @TestResult=@LocalTestResult OUTPUT, @TestOutput=@LocalTestOutput OUTPUT, @TestTimestamp=@LocalTestTimestamp OUTPUT;
+
+            BEGIN TRY
+                EXEC [dbo].sp_executesql @TestCode,
+                    N'@TestResult VARCHAR(100) OUTPUT, @TestOutput VARCHAR(MAX) OUTPUT, @TestTimestamp DATETIME2(7) OUT',
+                    @TestResult=@LocalTestResult OUTPUT, @TestOutput=@LocalTestOutput OUTPUT, @TestTimestamp=@LocalTestTimestamp OUTPUT;
+            END TRY
+            BEGIN CATCH
+
+                IF @Debug = 'Y' 
+                    BEGIN
+                        PRINT concat('An error was encountered running the dynamic SQL: ''', @TestCode, '''.');
+                        PRINT 'The process will end in failure.';
+
+                        SET @LocalTestOutput = 'Test could not be executed'
+                        SET @LocalTestResult = 'Fail'
+
+                     END
+
+            END CATCH
 
 	SELECT @LocalTestOutput
 
