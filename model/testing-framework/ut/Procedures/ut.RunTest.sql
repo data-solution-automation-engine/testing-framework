@@ -60,7 +60,7 @@ BEGIN
         PRINT concat('The test executable code retrieved is: ''', @TestCode, '''.');
     END
 
-    IF @Enabled = 'Y' 
+    IF @Enabled = 'Y'
         BEGIN
             SET @TestCode = REPLACE(@TestCode, '@TestObject', @TestObject);
 
@@ -73,7 +73,7 @@ BEGIN
             END TRY
             BEGIN CATCH
 
-                IF @Debug = 'Y' 
+                IF @Debug = 'Y'
                     BEGIN
                         PRINT concat('An error was encountered running the dynamic SQL: ''', @TestCode, '''.');
                         PRINT 'The process will end in failure.';
@@ -85,9 +85,9 @@ BEGIN
 
             END CATCH
 
-	SELECT @LocalTestOutput
+  SELECT @LocalTestOutput
 
-            IF @Debug = 'Y' 
+            IF @Debug = 'Y'
                 BEGIN
                     PRINT concat('Test Code: ''', @TestCode, '''.');
                     PRINT concat('Test Result: ''', @LocalTestResult, '''.');
@@ -99,8 +99,8 @@ BEGIN
         BEGIN TRY
 
             -- Set the run time of the test to now if not set in the test itself.
-			IF @LocalTestTimestamp IS NULL
-				SELECT @LocalTestTimestamp = SYSDATETIME();
+      IF @LocalTestTimestamp IS NULL
+        SELECT @LocalTestTimestamp = SYSDATETIME();
 
             INSERT INTO [ut].[TEST_RESULTS] (PLAN_ID, TEST_ID, TEST_TIMESTAMP, [OUTPUT], RESULT, TEST_CODE)
             VALUES (@PlanId, @TestId, @LocalTestTimestamp, @LocalTestOutput, @LocalTestResult, @TestCode)

@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>testing_framework</Name>
+    <Name>Testing_Framework</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{c221326b-35d6-423f-8146-43117e17a69b}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql160DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql150DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -88,9 +88,11 @@
     <Build Include="ut\Functions\ut.test_SampleTestFunction.sql" />
     <None Include="Examples\Example2.sql" />
     <None Include="Examples\Example_Reconciliation.sql" />
+    <Build Include="ut\Procedures\ut.ResetFramework.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Examples\Example.sql" />
+    <None Include="Testing_Framework.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\160\SqlSchemas\master.dacpac">

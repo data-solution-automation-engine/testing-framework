@@ -24,40 +24,40 @@ EXEC [ut].[RegisterTest]
     @TemplateId = '1',
     @Name = 'RECON_STG_CUSTOMER_PERSONAL',
     -- sample with test procedure
-	@Debug='Y',
+  @Debug='Y',
     @TestCode = 'BEGIN
-	-- Framework required.
-	--DECLARE @TestResult VARCHAR(10) = ''Fail'';
-	--DECLARE @TestOutput VARCHAR(MAX);
-	-- Local
-	DECLARE @Issues INT = 0;
+  -- Framework required.
+  --DECLARE @TestResult VARCHAR(10) = ''Fail'';
+  --DECLARE @TestOutput VARCHAR(MAX);
+  -- Local
+  DECLARE @Issues INT = 0;
 
-	BEGIN TRY
-		SELECT @Issues =
-			COUNT(*)
-		FROM [200_Integration_Layer].dbo.SAT_CUSTOMER sat
-		WHERE NOT EXISTS
-		(
-		  SELECT 1 FROM [200_Integration_Layer].dbo.HUB_CUSTOMER hub
-		  WHERE 1=1
-			 AND sat.CUSTOMER_SK = hub.CUSTOMER_SK
-		)
+  BEGIN TRY
+    SELECT @Issues =
+      COUNT(*)
+    FROM [200_Integration_Layer].dbo.SAT_CUSTOMER sat
+    WHERE NOT EXISTS
+    (
+      SELECT 1 FROM [200_Integration_Layer].dbo.HUB_CUSTOMER hub
+      WHERE 1=1
+       AND sat.CUSTOMER_SK = hub.CUSTOMER_SK
+    )
 
-		SET @TestOutput = CONVERT(VARCHAR(10),@Issues)+'' issues were found.'' 
+    SET @TestOutput = CONVERT(VARCHAR(10),@Issues)+'' issues were found.''
 
-		IF @Issues=0
-		BEGIN
-			SET @TestResult=''Pass''
-		END
-	END TRY
-	BEGIN CATCH
-		--THROW
-		SET @TestOutput = ERROR_MESSAGE();
-		SET @TestResult=''Fail''
-	END CATCH
+    IF @Issues=0
+    BEGIN
+      SET @TestResult=''Pass''
+    END
+  END TRY
+  BEGIN CATCH
+    --THROW
+    SET @TestOutput = ERROR_MESSAGE();
+    SET @TestResult=''Fail''
+  END CATCH
 
 
-	SELECT @TestOutput AS [OUTPUT], @TestResult AS [RESULT]
+  SELECT @TestOutput AS [OUTPUT], @TestResult AS [RESULT]
 END',
     @TestObject = 'dbo.STG_CUSTOMER_PERSONAL',
     -- Output

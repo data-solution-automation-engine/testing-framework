@@ -14,10 +14,6 @@ D:\Git_Repos\testing-framework\model\testing-framework\obj\Debug\testing_framewo
 D:\Git_Repos\testing-framework\model\testing-framework\obj\Debug\testing_framework.pdb
 D:\Git_Repos\testing-framework\model\testing-framework\bin\Debug\testing_framework.dll
 D:\Git_Repos\testing-framework\model\testing-framework\bin\Debug\testing_framework.pdb
-D:\Git_Repos\testing-framework\model\testing-framework\obj\Debug\Model.xml
-D:\Git_Repos\testing-framework\model\testing-framework\obj\Debug\refactor.xml
-D:\Git_Repos\testing-framework\model\testing-framework\obj\Debug\postdeploy.sql
-D:\Git_Repos\testing-framework\model\testing-framework\obj\Debug\predeploy.sql
 C:\Git_Repos\testing-framework\model\testing-framework\bin\Debug\testing-framework.dacpac
 C:\Git_Repos\testing-framework\model\testing-framework\obj\Debug\testing-framework.sqlproj.AssemblyReference.cache
 C:\Git_Repos\testing-framework\model\testing-framework\obj\Debug\Model.xml
