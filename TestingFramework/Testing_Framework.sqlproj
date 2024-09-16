@@ -89,6 +89,8 @@
     <None Include="Examples\Example2.sql" />
     <None Include="Examples\Example_Reconciliation.sql" />
     <Build Include="ut\Procedures\ut.ResetFramework.sql" />
+    <Build Include="ut\Tables\ut.TEST_EXTENSION.sql" />
+    <Build Include="ut\Tables\ut.TEST_PLAN_EXTENSION.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Examples\Example.sql" />

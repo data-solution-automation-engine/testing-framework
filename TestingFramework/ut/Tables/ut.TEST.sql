@@ -1,18 +1,16 @@
-﻿--if OBJECT_ID('[ut].[TEST]','U') IS NOT NULL
---    drop table [ut].[TEST]
---GO
-
-CREATE TABLE [ut].[TEST] (
-    [ID]               INT IDENTITY (1,1) NOT NULL,
-    [TEMPLATE_ID]      INT                NOT NULL,
-    [NAME]             VARCHAR (255)      NOT NULL,
-    [TEST_CODE]        NVARCHAR (MAX)     NOT NULL,
-    [AREA]             VARCHAR (100)      NULL,
-    [TEST_OBJECT]      VARCHAR (255)      NOT NULL,
-    [TEST_OBJECT_TYPE] VARCHAR (100)      NULL,
-    [NOTES]            VARCHAR (MAX)      NULL,
-    [ENABLED]          CHAR (1)           NOT NULL,
-    [CHECKSUM]         BINARY (20)        NOT NULL,
+﻿CREATE TABLE [ut].[TEST] (
+    [ID]                  INT IDENTITY (1,1) NOT NULL,
+    [TEMPLATE_ID]         INT                NOT NULL,
+    [NAME]                NVARCHAR (255)     NOT NULL,
+    [TEST_CODE]           NVARCHAR (MAX)     NOT NULL,
+    [AREA]                NVARCHAR (100)     NULL,
+    [TEST_OBJECT]         NVARCHAR (255)     NOT NULL,
+    [TEST_OBJECT_TYPE]    NVARCHAR (100)     NULL,
+    [NOTES]               NVARCHAR (MAX)     NULL,
+    [CHECKSUM]            BINARY(20)         NOT NULL,
+    [ACTIVE_INDICATOR]    CHAR (1)
+     CONSTRAINT [DF_UT_TEST_ACTIVE_INDICATOR]
+      DEFAULT ('Y')                          NOT NULL,
     CONSTRAINT [PK_TEST] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [IX_TEST_NAME] UNIQUE ([NAME]),
     CONSTRAINT [FK_TEST_TEMPLATE_ID] FOREIGN KEY ([TEMPLATE_ID]) REFERENCES [ut].[TEST_TEMPLATE] ([ID])

@@ -36,7 +36,7 @@ as
 begin
 
     begin try
-        insert into [ut].[TEST_PLAN] (NAME, ENABLED, NOTES)
+        insert into [ut].[TEST_PLAN] (NAME, ACTIVE_INDICATOR, NOTES)
         select * from (values (@PlanName,@Enabled, @Notes)) AS refData(NAME, ENABLED, NOTES)
         where NOT EXISTS (select NULL from [ut].[TEST_PLAN] t where t.NAME = refData.NAME);
         set @PlanId = SCOPE_IDENTITY();

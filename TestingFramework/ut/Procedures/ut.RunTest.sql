@@ -48,7 +48,7 @@ BEGIN
         @Area = [AREA],
         @TestObject = [TEST_OBJECT],
         @TestObjectType = [TEST_OBJECT_TYPE],
-        @Enabled = [ENABLED]
+        @Enabled = [ACTIVE_INDICATOR]
     FROM [ut].[TEST] WHERE [NAME] = @TestName;
 
     IF @Debug = 'Y' BEGIN

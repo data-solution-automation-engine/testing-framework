@@ -28,7 +28,7 @@ begin
     DECLARE @Enabled CHAR(1);
     select
         @PlanId = [ID],
-        @Enabled = [ENABLED]
+        @Enabled = [ACTIVE_INDICATOR]
     from [ut].[TEST_PLAN] where [NAME] = @PlanName;
 
     if @Debug = 'Y' begin

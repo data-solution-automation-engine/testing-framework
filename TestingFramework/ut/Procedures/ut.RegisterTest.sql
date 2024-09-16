@@ -59,7 +59,7 @@ BEGIN
 
     BEGIN TRY
     -- Insert the test, if it does not exist yet.
-        INSERT INTO [ut].[TEST] (TEMPLATE_ID, NAME, TEST_CODE, AREA, TEST_OBJECT, TEST_OBJECT_TYPE, NOTES, [ENABLED], [CHECKSUM])
+        INSERT INTO [ut].[TEST] (TEMPLATE_ID, NAME, TEST_CODE, AREA, TEST_OBJECT, TEST_OBJECT_TYPE, NOTES, [ACTIVE_INDICATOR], [CHECKSUM])
         SELECT * FROM (
             VALUES (@TemplateId, @Name, @TestCode, @Area, @TestObject, @TestObjectType, @Notes, @Enabled, @NewChecksum)
             ) AS refData(TEMPLATE_ID, NAME, TEST_CODE, AREA, TEST_OBJECT, TEST_OBJECT_TYPE, NOTES, [ENABLED], [CHECKSUM])
@@ -103,7 +103,7 @@ BEGIN
             [AREA] = @Area,
             [TEST_OBJECT_TYPE] = @TestObjectType,
             [NOTES] = @Notes,
-            [ENABLED] = @Enabled,
+            [ACTIVE_INDICATOR] = @Enabled,
             [CHECKSUM] = @NewChecksum
           WHERE [ID] = @ExistingID;
           IF @Debug = 'Y'
