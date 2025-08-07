@@ -78,7 +78,7 @@ BEGIN
                         PRINT concat('An error was encountered running the dynamic SQL: ''', @TestCode, '''.');
                         PRINT 'The process will end in failure.';
 
-                        SET @LocalTestOutput = 'Test could not be executed'
+                        SET @LocalTestOutput = 'Test could not be executed with error: '''+ERROR_MESSAGE()+'';
                         SET @LocalTestResult = 'Fail'
 
                      END
